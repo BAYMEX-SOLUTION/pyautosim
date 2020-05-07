@@ -2,8 +2,6 @@ import os
 import sys
 import subprocess
 import json
-from Support import PackIssue, ActionIssue
-
 
 class ActionRunner():
     def __init__(self, config, pack_details):
