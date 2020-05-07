@@ -10,11 +10,11 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/BAYMEX-SOLUTION/pyautosim',
-    package_dir={'': 'src'},
-    packages=setuptools.find_packages(where='src'),
+    packages=['pyautosim'],
     python_requires='>=3.4',
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License"
     ],
+    entry_points={"console_scripts": []}
 )
