@@ -2,6 +2,8 @@ import os
 import sys
 import subprocess
 import json
+from .Support import Support
+
 
 class ActionRunner():
     def __init__(self, config, pack_details):
@@ -41,4 +43,16 @@ class ActionRunner():
         stdout = ret.stdout.decode('utf-8').split('\r\n')
         stderr = ret.stderr.decode('utf-8').split('\r\n')
 
-        return {'stdout': stdout, 'stderr': stderr, 'returncode': ret.returncode}
+        result = {}
+        # manipulate SYSTEM::
+        for i in range(0,len(stdout)):
+            each = stdout[i]
+
+            # trim stdout. remove SYSTEM::
+            if each.startswith(Support().returnStatement_prefix):
+                temp = each.split(Support().returnStatement_prefix)[-1]
+                result = json.loads(temp)
+                stdout = stdout[0:i]
+                break
+
+        return {'stdout': stdout, 'stderr': stderr, 'returncode': ret.returncode, 'result': result}
