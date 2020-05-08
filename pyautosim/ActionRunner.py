@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 import json
-from .Support import Support
+from .Support import Support, PackIssue, ActionIssue
 
 
 class ActionRunner():
@@ -36,6 +36,8 @@ class ActionRunner():
             # run entrypoint using venv python
             exe = self.runnerType_python(
                 self.config['venvFolder'], cur_pack['name'])
+        else:
+            raise PackIssue("no runner defined for '{}'".format(cur_action['runner']))
 
         # change directory to action's folder
         original_cwd = os.getcwd()
