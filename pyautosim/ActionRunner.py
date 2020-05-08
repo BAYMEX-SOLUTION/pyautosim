@@ -10,6 +10,12 @@ class ActionRunner():
         self.pack_details = pack_details
         self.config = config
 
+    def runnerType_python(self, venvFolder, cur_pack_name):
+        return os.path.join(venvFolder,
+                            cur_pack_name,
+                            'Scripts',
+                            "python.exe")
+
     def run(self, pack_action_array, parameters):
         # check if pack is registered
         if pack_action_array[0] not in self.pack_details:
@@ -26,16 +32,15 @@ class ActionRunner():
             cur_pack['path'], pack_action_array[1])
         cur_action['name'] = pack_action_array[1]
 
-        # run entrypoint using venv python
-        py_exe = os.path.join(self.config['venvFolder'],
-                              cur_pack['name'],
-                              'Scripts',
-                              "python.exe")
+        if cur_action['runner'] == 'python':
+            # run entrypoint using venv python
+            exe = self.runnerType_python(
+                self.config['venvFolder'], cur_pack['name'])
 
         # change directory to action's folder
         original_cwd = os.getcwd()
         os.chdir(cur_action['path'])
-        ret = subprocess.run([py_exe, cur_action['entrypoint'],
+        ret = subprocess.run([exe, cur_action['entrypoint'],
                               json.dumps(parameters)], shell=True, capture_output=True)
         os.chdir(original_cwd)
 
@@ -45,7 +50,7 @@ class ActionRunner():
 
         result = {}
         # manipulate SYSTEM::
-        for i in range(0,len(stdout)):
+        for i in range(0, len(stdout)):
             each = stdout[i]
 
             # trim stdout. remove SYSTEM::

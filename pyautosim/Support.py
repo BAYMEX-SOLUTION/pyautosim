@@ -33,5 +33,5 @@ class Support():
 
     def returnStatement(self, data):
         toPrint = "{}{}".format(self.returnStatement_prefix, json.dumps(data))
-        print(toPrint)
+        print (toPrint)
         sys.exit()
